@@ -3,6 +3,18 @@ export const prerender = false;
 import type { APIRoute } from "astro";
 import { supabase } from "../../../lib/supabase";
 
+const getURL = () => {
+    let url =
+        process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+        process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+        'http://localhost:4321/'
+    // Make sure to include `https://` when not localhost.
+    url = url.startsWith('http') ? url : `https://${url}`
+    // Make sure to include a trailing `/`.
+    url = url.endsWith('/') ? url : `${url}/`
+    return url
+}
+
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     const formData = await request.formData();
     const email = formData.get("email")?.toString();
@@ -12,11 +24,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
         return new Response("Email is required", { status: 400 });
     }
 
-    const { data, error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
             shouldCreateUser: false,
-            emailRedirectTo: '/profile',
+            emailRedirectTo: getURL(),
         },
     });
 
