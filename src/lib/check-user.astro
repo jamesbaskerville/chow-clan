@@ -1,0 +1,17 @@
+---
+import { supabase } from "./supabase";
+
+export const checkUser = async (astro: typeof Astro) => {
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        // astro.redirect("/login");
+        return { user: null, supabase: null };
+    } else {
+        return { user, supabase };
+    }
+};
+---

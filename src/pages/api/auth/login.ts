@@ -1,7 +1,8 @@
 // With `output: 'hybrid'` configured:
 export const prerender = false;
 import type { APIRoute } from "astro";
-import { supabase } from "../../../lib/supabase";
+import { createServerClient, parseCookieHeader } from "@supabase/ssr";
+import { createClient } from "../../../lib/supabase";
 
 const getURL = () => {
     let url =
@@ -15,7 +16,8 @@ const getURL = () => {
     return url
 }
 
-export const POST: APIRoute = async ({ request, cookies, redirect }) => {
+export const POST: APIRoute = async (context) => {
+    const { request, cookies, redirect } = context;
     const formData = await request.formData();
     const email = formData.get("email")?.toString();
     // const password = formData.get("password")?.toString();
@@ -24,6 +26,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
         return new Response("Email is required", { status: 400 });
     }
 
+    const supabase = createClient(context);
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -44,5 +47,5 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     // cookies.set("sb-refresh-token", refresh_token, {
     //     path: "/",
     // });
-    return redirect("/profile");
+    return redirect("/check-email");
 };

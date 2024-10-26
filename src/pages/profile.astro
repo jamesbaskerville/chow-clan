@@ -1,0 +1,79 @@
+---
+export const prerender = false;
+
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { supabase } from "../lib/supabase";
+
+const user = (Astro.locals as any).user;
+
+const { data: profiles, error } = await supabase.from("profiles").select("*");
+console.log("Query data", profiles, error);
+
+console.log("Rendering the profile page");
+---
+
+<Layout title="Your Profile">
+    <main>
+        <h1>Your Profile</h1>
+
+        <section>
+            <Card title="Settings" body="asdf">
+                <form
+                    id="user-settings"
+                    action="api/auth/update-email"
+                    method="post"
+                >
+                    <label for="email">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        required
+                        value={user?.email}
+                    />
+                </form>
+            </Card>
+            <Card title="Personal Information" body="info here">
+                <form id="personal-info">
+                    <label for="name">Name</label>
+                    <input id="name" type="text" required />
+                </form>
+            </Card>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        color: white;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    :global(.card) {
+        width: 100%;
+    }
+</style>

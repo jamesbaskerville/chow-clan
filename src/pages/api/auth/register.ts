@@ -3,5 +3,5 @@ export const prerender = false;
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
-    return redirect("/signin");
+    return redirect("/login");
 };
