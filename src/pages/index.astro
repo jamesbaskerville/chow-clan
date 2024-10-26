@@ -1,9 +1,9 @@
 ---
+export const prerender = true;
+
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 ---
-
-export const prerender = true;
 
 <Layout title="The Chow Clan">
     <main>
@@ -38,16 +38,17 @@ export const prerender = true;
         <h1>The <span class="text-gradient">Chow Clan</span></h1>
         <ul role="list" class="link-card-grid">
             <Card
-                href="https://docs.astro.build/"
-                title="Documentation"
-                body="Learn how Astro works and explore the official API docs."
+                href="/profile"
+                title="Your Profile"
+                body="Update your information"
             />
             <Card
-                href="https://astro.build/integrations/"
-                title="Integrations"
-                body="Supercharge your project with new frameworks and libraries."
+                href="/family-tree"
+                title="Family Tree"
+                body="Explore the Chow family tree"
             />
-            <Card
+            <Card href="/events" title="Events" body="See upcoming events!" />
+            <!-- <Card
                 href="https://astro.build/themes/"
                 title="Themes"
                 body="Explore a galaxy of community-built starter themes."
@@ -56,7 +57,7 @@ export const prerender = true;
                 href="https://astro.build/chat/"
                 title="Community"
                 body="Come say hi to our amazing Discord community. ❤️"
-            />
+            /> -->
         </ul>
     </main>
 </Layout>
