@@ -1,9 +1,10 @@
 import { createServerClient, parseCookieHeader } from '@supabase/ssr'
 import type { APIContext, AstroGlobal } from 'astro'
+import type { Database } from '../database.types'
 
 import { createClient as createClientClient } from "@supabase/supabase-js";
 
-export const supabase = createClientClient(
+export const supabase = createClientClient<Database>(
     import.meta.env.SUPABASE_URL,
     import.meta.env.SUPABASE_ANON_KEY,
 );

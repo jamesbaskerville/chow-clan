@@ -1,7 +1,6 @@
 // With `output: 'hybrid'` configured:
 export const prerender = false;
 import type { APIRoute } from "astro";
-import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import { createClient } from "../../../lib/supabase";
 
 const getURL = () => {
@@ -20,12 +19,12 @@ export const POST: APIRoute = async (context) => {
     const { request, cookies, redirect } = context;
     const formData = await request.formData();
     const email = formData.get("email")?.toString();
-    // const password = formData.get("password")?.toString();
 
     if (!email) {
         return new Response("Email is required", { status: 400 });
     }
 
+    console.log("Sending magic link to ", email, getURL());
     const supabase = createClient(context);
     const { error } = await supabase.auth.signInWithOtp({
         email,

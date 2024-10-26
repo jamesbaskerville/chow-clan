@@ -3,11 +3,14 @@ export const prerender = false;
 
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
-import { supabase } from "../lib/supabase";
+import { createClient } from "../lib/supabase";
 
 const user = (Astro.locals as any).user;
 
-const { data: profiles, error } = await supabase.from("profiles").select("*");
+const supabase = createClient(Astro);
+const { data: profiles, error } = await supabase
+    .from("profiles")
+    .select("email");
 console.log("Query data", profiles, error);
 
 console.log("Rendering the profile page");
@@ -18,25 +21,29 @@ console.log("Rendering the profile page");
         <h1>Your Profile</h1>
 
         <section>
-            <Card title="Settings" body="asdf">
-                <form
-                    id="user-settings"
-                    action="api/auth/update-email"
-                    method="post"
-                >
-                    <label for="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        required
-                        value={user?.email}
-                    />
-                </form>
-            </Card>
-            <Card title="Personal Information" body="info here">
+            <Card title="Personal Information">
                 <form id="personal-info">
-                    <label for="name">Name</label>
-                    <input id="name" type="text" required />
+                    <fieldset>
+                        <div class="row">
+                            <label for="email">Email</label>
+                            <span id="email">{user.email}</span>
+                        </div>
+
+                        <div class="row">
+                            <label for="name">Name</label>
+                            <input id="name" type="text" required />
+                        </div>
+
+                        <div class="row">
+                            <label for="name">Birth Date</label>
+                            <input id="birth_date" type="date" />
+                        </div>
+
+                        <div class="row">
+                            <div></div>
+                            <input id="submit" type="submit" value="Save" />
+                        </div>
+                    </fieldset>
                 </form>
             </Card>
         </section>
@@ -63,6 +70,49 @@ console.log("Rendering the profile page");
     h1 {
         margin-bottom: 2rem;
         text-align: center;
+    }
+
+    form {
+        font-family: monospace;
+        font-size: 1.2rem;
+
+        fieldset {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 1.3rem;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        input[type="date"] {
+            width: 60%;
+            text-align: right;
+            font-family: monospace;
+            font-size: 1.2rem;
+        }
+
+        input[type="submit"] {
+            font-family: monospace;
+            font-size: 1.2rem;
+            width: 40%;
+
+            &:hover {
+                background-color: rgb(82, 157, 223);
+            }
+            &:active {
+                background-color: rgb(18, 129, 225);
+                color: white;
+            }
+        }
     }
 
     section {
