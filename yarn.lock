@@ -1479,6 +1479,11 @@ ci-info@^4.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-4.0.0.tgz#65466f8b280fc019b9f50a5388115d17a63a44f2"
   integrity sha512-TdHqgGf9odd8SXNuxtUBVx8Nv+qZOejE6qyqiy5NtbYYQOeFa6zmHkxlPzmaLxWWHsU6nJmB7AETdVPi+2NBUg==
 
+classnames@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
+  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
+
 cli-boxes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/cli-boxes/-/cli-boxes-3.0.0.tgz#71a10c716feeba005e4504f36329ef0b17cf3145"
@@ -3471,6 +3476,13 @@ react-dom@^18.3.1:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
 
+react-family-tree@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-family-tree/-/react-family-tree-3.2.0.tgz#60be2e4edd3fc166f4fb7e2285f922a9457cec6a"
+  integrity sha512-TCoLWPSLoP89CpfzK7vTxA2Ss0Qu6PuusdwjuLHeSrYiQfW6PLYCc8wTidRfKTjH+4FueF5OLMolj7rhh+c3MA==
+  dependencies:
+    relatives-tree "3.2.x"
+
 react-refresh@^0.14.2:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.2.tgz#3833da01ce32da470f1f936b9d477da5c7028bf9"
@@ -3544,7 +3556,7 @@ rehype@^13.0.2:
     rehype-stringify "^10.0.0"
     unified "^11.0.0"
 
-relatives-tree@^3.2.1:
+relatives-tree@3.2.x, relatives-tree@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/relatives-tree/-/relatives-tree-3.2.1.tgz#a04a106cb6460112b798fd3de85af7484b104503"
   integrity sha512-mm4SSf8BmgMH8jQFwUfjN0MguDlIIvOAjSNC1wN2ppPTaPW8Ud2Tk+5QqFGEJfcMPaU8Kf1f840fPyHkxGpcAg==

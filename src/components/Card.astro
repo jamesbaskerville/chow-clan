@@ -1,6 +1,6 @@
 ---
 interface Props {
-    title: string;
+    title?: string;
     body?: string;
 }
 
@@ -9,9 +9,9 @@ const { title, body } = Astro.props;
 
 <li class="card">
     <div>
-        <h2>
+        {title && (<h2>
             {title}
-        </h2>
+        </h2>)}
         {body && (<p>
             {body}
         </p>)}
