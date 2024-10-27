@@ -1,0 +1,80 @@
+---
+import Logo from "./Logo.astro";
+
+const url = Astro.url;
+const current = url.pathname;
+---
+
+<div class="navigation">
+    <div class="logo">
+        <a href="/">
+            <h1><Logo /></h1>
+        </a>
+    </div>
+    <div class="links">
+        <a href="/profile" class:list={[{ active: current == "/profile" }]}>
+            Profile</a
+        >
+        <a
+            href="/family-tree"
+            class:list={[{ active: current == "/family-tree" }]}>Family Tree</a
+        >
+        <a href="/events" class:list={[{ active: current == "/events" }]}
+            >Events</a
+        >
+    </div>
+</div>
+
+<style>
+    .navigation {
+        position: relative;
+        top: 0;
+        margin: auto;
+        margin-top: 20px;
+        width: 80%;
+        max-width: 800px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        transition: all 500ms ease;
+
+        &:hover {
+            -webkit-transform: scale(1.2);
+            -ms-transform: scale(1.2);
+            transform: scale(1.2);
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+        border: 5px;
+    }
+
+    .links {
+        display: flex;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .links > a {
+        margin-left: 0.5rem;
+        padding: 10px 20px;
+        border-radius: 0.5rem;
+        background-color: rgb(var(--accent-dark));
+        text-align: center;
+        transition: all 500ms ease;
+        width: 100px;
+
+        &:hover {
+            width: 120px;
+        }
+
+        &.active {
+            background-color: rgb(var(--accent));
+        }
+    }
+</style>

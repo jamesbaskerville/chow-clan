@@ -1249,6 +1249,11 @@ array-iterate@^2.0.0:
   resolved "https://registry.yarnpkg.com/array-iterate/-/array-iterate-2.0.1.tgz#6efd43f8295b3fee06251d3d62ead4bd9805dd24"
   integrity sha512-I1jXZMjAgCMmxT4qxXfPXa6SthSoE8h6gkSI9BGGNv8mP8G/v0blc+qFnZu6K42vTOiuME596QaLO0TP3Lk0xg==
 
+astro-navbar@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/astro-navbar/-/astro-navbar-2.3.4.tgz#a3e42727f894a143d5e4433e4506b2e175c0eb7a"
+  integrity sha512-LfAKIe9D5TnNGgE7aUDupoz1VkFtzZGKU4qEEbmSbZvHDXijzcjmT7ew7Ew23JXXqqxe7WuW1Wt4AcOtkfYBfQ==
+
 astro@^4.16.7:
   version "4.16.7"
   resolved "https://registry.yarnpkg.com/astro/-/astro-4.16.7.tgz#7896148d638dab4e7f0e5eec8816a446c1178e3e"
@@ -3538,6 +3543,11 @@ rehype@^13.0.2:
     rehype-parse "^9.0.0"
     rehype-stringify "^10.0.0"
     unified "^11.0.0"
+
+relatives-tree@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/relatives-tree/-/relatives-tree-3.2.1.tgz#a04a106cb6460112b798fd3de85af7484b104503"
+  integrity sha512-mm4SSf8BmgMH8jQFwUfjN0MguDlIIvOAjSNC1wN2ppPTaPW8Ud2Tk+5QqFGEJfcMPaU8Kf1f840fPyHkxGpcAg==
 
 remark-gfm@^4.0.0:
   version "4.0.0"

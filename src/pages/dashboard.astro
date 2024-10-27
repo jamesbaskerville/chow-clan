@@ -3,12 +3,13 @@ export const prerender = true;
 
 import Layout from "../layouts/Layout.astro";
 import LinkCard from "../components/LinkCard.astro";
+import Logo from "../components/Logo.astro";
 ---
 
 <Layout title="The Chow Clan">
     <main>
 
-        <h1>The <span class="text-gradient">Chow Clan</span></h1>
+        <h1><Logo /></h1>
         <ul role="list" class="link-card-grid">
             <LinkCard
                 href="/profile"

@@ -18,7 +18,7 @@ console.log("Rendering the profile page");
 
 <Layout title="Your Profile">
     <main>
-        <h1>Your Profile</h1>
+        <h2>Your Profile</h2>
 
         <section>
             <Card title="Personal Information">
@@ -26,7 +26,7 @@ console.log("Rendering the profile page");
                     <fieldset>
                         <div class="row">
                             <label for="email">Email</label>
-                            <span id="email">{user.email}</span>
+                            <span id="email">{user?.email}</span>
                         </div>
 
                         <div class="row">
@@ -51,27 +51,6 @@ console.log("Rendering the profile page");
 </Layout>
 
 <style>
-    main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
-        padding: 2rem;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4 {
-        color: white;
-    }
-
-    h1 {
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
     form {
         font-family: monospace;
         font-size: 1.2rem;
@@ -104,9 +83,13 @@ console.log("Rendering the profile page");
             font-family: monospace;
             font-size: 1.2rem;
             width: 40%;
+            transition: all 500ms ease;
 
             &:hover {
                 background-color: rgb(82, 157, 223);
+                -webkit-transform: scale(1.1);
+                -ms-transform: scale(1.1);
+                transform: scale(1.1);
             }
             &:active {
                 background-color: rgb(18, 129, 225);
@@ -119,7 +102,6 @@ console.log("Rendering the profile page");
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        max-width: 600px;
         width: 100%;
     }
 
