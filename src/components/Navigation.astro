@@ -22,6 +22,9 @@ const current = url.pathname;
         <a href="/events" class:list={[{ active: current == "/events" }]}
             >Events</a
         >
+        <a href="/logout" class="minimal"
+            >Sign out</a
+        >
     </div>
 </div>
 
@@ -69,8 +72,15 @@ const current = url.pathname;
         transition: all 500ms ease;
         width: 100px;
 
+        &.minimal {
+            background-color: inherit;
+            border: 2px solid rgb(var(--accent-dark));
+            color: rgb(var(--accent-dark));
+        }
+
         &:hover {
             width: 120px;
+            background-color: rgb(var(--accent-dark));
             color: rgb(var(--accent-two));
         }
 
