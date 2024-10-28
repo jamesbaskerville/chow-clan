@@ -8,7 +8,6 @@ import Logo from "../components/Logo.astro";
 
 <Layout title="The Chow Clan">
     <main>
-
         <h1><Logo /></h1>
         <ul role="list" class="link-card-grid">
             <LinkCard
@@ -21,7 +20,11 @@ import Logo from "../components/Logo.astro";
                 title="Family Tree"
                 body="Explore the Chow family tree"
             />
-            <LinkCard href="/events" title="Events" body="See upcoming events!" />
+            <LinkCard
+                href="/events"
+                title="Events"
+                body="See upcoming events!"
+            />
         </ul>
     </main>
 </Layout>
@@ -32,7 +35,7 @@ import Logo from "../components/Logo.astro";
         padding: 1rem;
         width: 800px;
         max-width: calc(100% - 2rem);
-        color: white;
+        color: rgb(var(--font-color));
         font-size: 20px;
         line-height: 1.6;
     }

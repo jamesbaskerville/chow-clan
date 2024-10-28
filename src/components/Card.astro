@@ -9,12 +9,8 @@ const { title, body } = Astro.props;
 
 <li class="card">
     <div>
-        {title && (<h2>
-            {title}
-        </h2>)}
-        {body && (<p>
-            {body}
-        </p>)}
+        {title && <h2>{title}</h2>}
+        {body && <p>{body}</p>}
         <slot />
     </div>
 </li>
@@ -37,7 +33,7 @@ const { title, body } = Astro.props;
         line-height: 1.4;
         padding: calc(1.5rem - 1px);
         border-radius: 8px;
-        color: white;
+        color: rgb(var(--font-color));
         background-color: #23262d;
         opacity: 0.8;
     }
