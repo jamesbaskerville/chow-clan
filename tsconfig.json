@@ -2,6 +2,12 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "strict": true,
+    "types": [
+        "astro/client",
+        "@aws-sdk/client-s3",
+        "zod"
+    ]
   }
 }

@@ -1,13 +1,14 @@
 import { defineMiddleware } from "astro:middleware";
 import { createClient } from "./lib/supabase";
 
-const protectedRoutes = ["/", "/family-tree", "/profile", "/events"];
+const allowedAdminRoutes = ["/admin/login", "/admin/check-email", "/admin/logout"]
 
 export const onRequest = defineMiddleware(async (context, next) => {
     console.log('Middleware');
-    const { request, url, redirect, locals } = context;
 
-    if (!protectedRoutes.includes(url.pathname)){
+    const { url, redirect, locals } = context;
+
+    if (!url.pathname.startsWith('/admin')){
         return next();
     }
 
@@ -20,11 +21,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     (locals as any).user = user ? user : null;
 
-    if (protectedRoutes.includes(url.pathname) && !user) {
-        console.log("User not found, redirecting to /login from ", url.pathname);
-        return redirect("/login");
+    if (!allowedAdminRoutes.includes(url.pathname) && !user) {
+        console.log("User not found, redirecting to /admin/login from ", url.pathname);
+        return redirect("/admin/login");
     }
 
     return next();
-
 })

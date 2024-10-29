@@ -1,0 +1,298 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import {
+    PutObjectCommand,
+    GetObjectCommand,
+    ListObjectVersionsCommand,
+} from "@aws-sdk/client-s3";
+import { s3Client } from "../../lib/aws";
+import { FamilyTreeSchema } from "../../schemas/familyTree";
+const user = (Astro.locals as any).user;
+
+// Fetch current JSON from S3
+const getCurrentVersion = async () => {
+    try {
+        const command = new GetObjectCommand({
+            Bucket: import.meta.env.S3_BUCKET_NAME,
+            Key: "family-tree.json",
+        });
+        const response = await s3Client.send(command);
+        const str = await response.Body?.transformToString();
+        const json = JSON.parse(str || "{}");
+
+        // Add this validation
+        return FamilyTreeSchema.parse(json);
+    } catch (error) {
+        console.error("Error fetching family tree:", error);
+        return null;
+    }
+};
+
+const currentData = await getCurrentVersion();
+
+interface S3Version {
+    VersionId: string;
+    LastModified: Date;
+    IsLatest?: boolean;
+}
+
+// Get version history
+const getVersions = async () => {
+    const command = new ListObjectVersionsCommand({
+        Bucket: import.meta.env.S3_BUCKET_NAME,
+        Prefix: "family-tree.json",
+    });
+    const response = await s3Client.send(command);
+    return response.Versions || [];
+};
+
+const versions: S3Version[] = await getVersions();
+---
+
+<AdminLayout title="Family Tree Updates" user={user}>
+    <main>
+        <div class="editor-container">
+            <h1>Family Tree Editor</h1>
+
+            <div id="editor">
+                <div class="actions">
+                    <button id="saveBtn">Save Changes</button>
+                    <button id="formatBtn">Format JSON</button>
+                    <button id="validateBtn">Validate Schema</button>
+                </div>
+
+                <div class="editor-section">
+                    <div id="validationErrors" class="validation-errors"></div>
+                    <textarea
+                        id="jsonEditor"
+                        class="json-editor"
+                        spellcheck="false"
+                        >{JSON.stringify(currentData, null, 2)}</textarea
+                    >
+                </div>
+
+                <div class="version-history">
+                    <h3>Version History</h3>
+                    <div class="version-list">
+                        {
+                            versions.map((version) => (
+                                <div class="version-item">
+                                    <button
+                                        onclick={`loadVersion('${version.VersionId}')`}
+                                    >
+                                        {new Date(
+                                            version.LastModified,
+                                        ).toLocaleString()}
+                                        {version.IsLatest && " (Current)"}
+                                    </button>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</AdminLayout>
+
+<style>
+    * {
+        font-family: monospace;
+    }
+
+    .editor-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .editor-section {
+        margin-top: 20px;
+    }
+    .json-editor {
+        width: 100%;
+        height: 600px;
+        font-family: monospace;
+        padding: 10px;
+    }
+    .version-history {
+        margin-top: 20px;
+    }
+    .version-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .invalid {
+        border-color: red !important;
+    }
+    .validation-errors {
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .validation-errors .error {
+        color: #dc2626;
+        background-color: #fee2e2;
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .validation-errors .success {
+        color: #16a34a;
+        background-color: #dcfce7;
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .validation-errors pre {
+        white-space: pre-wrap;
+        margin-top: 0.5rem;
+    }
+</style>
+
+<script>
+    import { FamilyTreeSchema } from "../../schemas/familyTree";
+    import { ZodError } from "zod";
+
+    const editor = document.getElementById("jsonEditor") as HTMLTextAreaElement;
+    const saveBtn = document.getElementById("saveBtn") as HTMLButtonElement;
+    const formatBtn = document.getElementById("formatBtn") as HTMLButtonElement;
+    const validateBtn = document.getElementById(
+        "validateBtn",
+    ) as HTMLButtonElement;
+    const validationErrors = document.getElementById(
+        "validationErrors",
+    ) as HTMLDivElement;
+
+    if (!editor || !saveBtn || !formatBtn) {
+        throw new Error("Required elements not found");
+    }
+    if (!validateBtn || !validationErrors) {
+        throw new Error("Required elements not found");
+    }
+
+    function formatZodError(error: ZodError) {
+        return error.errors
+            .map((err) => {
+                const path = err.path.join(".");
+                return `${path}: ${err.message}`;
+            })
+            .join("\n");
+    }
+
+    async function validateJson(json: unknown) {
+        try {
+            const result = await FamilyTreeSchema.parseAsync(json);
+            validationErrors.innerHTML =
+                '<div class="success">✓ Valid family tree structure</div>';
+            return true;
+        } catch (e) {
+            if (e instanceof ZodError) {
+                validationErrors.innerHTML = `<div class="error">
+          <span>Validation Errors:</span>
+          <pre>${formatZodError(e)}</pre>
+        </div>`;
+            } else {
+                validationErrors.innerHTML = `<div class="error">Unexpected error during validation</div>`;
+            }
+            return false;
+        }
+    }
+
+    // Validate JSON on input
+    editor.addEventListener("input", async () => {
+        try {
+            const json = JSON.parse(editor.value);
+            editor.classList.remove("invalid");
+            await validateJson(json);
+        } catch (e) {
+            const error = e as Error;
+            validationErrors.innerHTML = `<div class="error">Invalid JSON: ${error.message}</div>`;
+            editor.classList.add("invalid");
+        }
+    });
+
+    // Format JSON
+    formatBtn.addEventListener("click", () => {
+        try {
+            const json = JSON.parse(editor.value);
+            editor.value = JSON.stringify(json, null, 2);
+        } catch (e) {
+            alert("Cannot format invalid JSON");
+        }
+    });
+
+    validateBtn.addEventListener("click", async () => {
+        try {
+            const json = JSON.parse(editor.value);
+            await validateJson(json);
+        } catch (e) {
+            const error = e as Error;
+            validationErrors.innerHTML = `<div class="error">Invalid JSON: ${error.message}</div>`;
+        }
+    });
+
+    // Save changes
+    saveBtn.addEventListener("click", async () => {
+        try {
+            const json = JSON.parse(editor.value);
+
+            if (!(await validateJson(json))) {
+                throw new Error("Invalid family tree structure");
+            }
+
+            // Update last modified date
+            if (typeof json === "object" && json !== null) {
+                if (!json.metadata) {
+                    json.metadata = {};
+                }
+                json.metadata.lastUpdated = new Date().toISOString();
+            }
+
+            const response = await fetch("/api/admin/family-tree", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(json),
+            });
+
+            if (response.ok) {
+                alert("Saved successfully!");
+                window.location.reload(); // Refresh to show new version
+            } else {
+                throw new Error("Failed to save");
+            }
+        } catch (e) {
+            const error = e as Error;
+            alert(`Error saving: ${error.message}`);
+        }
+    });
+
+    // Load specific version
+    async function loadVersion(versionId: string) {
+        try {
+            const response = await fetch(`/api/admin/family-tree/${versionId}`);
+            if (response.ok) {
+                const json = await response.json();
+                editor.value = JSON.stringify(json.data, null, 2);
+                // Trigger validation
+                editor.dispatchEvent(new Event("input"));
+            } else {
+                throw new Error("Failed to load version");
+            }
+        } catch (e) {
+            const error = e as Error;
+            alert(`Error loading version: ${error.message}`);
+        }
+    }
+
+    // Make loadVersion available globally for the onclick handlers
+    // This is necessary because we're using it in inline onclick attributes
+    declare global {
+        interface Window {
+            loadVersion: typeof loadVersion;
+        }
+    }
+    window.loadVersion = loadVersion;
+</script>

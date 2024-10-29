@@ -1,0 +1,18 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+
+const user = (Astro.locals as any).user;
+---
+
+<AdminLayout title="Admin Dashboard" user={user}>
+    <main>
+        <h2>Admin Dashboard</h2>
+    </main>
+</AdminLayout>
+
+<style>
+    * {
+        font-family: monospace;
+    }
+</style>

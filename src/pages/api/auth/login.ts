@@ -16,7 +16,7 @@ const getURL = () => {
 }
 
 export const POST: APIRoute = async (context) => {
-    const { request, cookies, redirect } = context;
+    const { request, redirect } = context;
     const formData = await request.formData();
     const email = formData.get("email")?.toString();
 
@@ -39,12 +39,5 @@ export const POST: APIRoute = async (context) => {
         return new Response(error.message, { status: 500 });
     }
 
-    // const { access_token, refresh_token } = data.session;
-    // cookies.set("sb-access-token", access_token, {
-    //     path: "/",
-    // });
-    // cookies.set("sb-refresh-token", refresh_token, {
-    //     path: "/",
-    // });
-    return redirect("/check-email");
+    return redirect("/admin/check-email");
 };

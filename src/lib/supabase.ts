@@ -26,3 +26,15 @@ export function createClient(context: APIContext | AstroGlobal) {
         }
     )
 }
+
+export async function getUser(context: APIContext | AstroGlobal) {
+    const supabase = createClient(context);
+    const {
+        data: { user },
+        error
+    } = await supabase.auth.getUser();
+
+    if (error) console.error(error.message);
+
+    return user;
+}

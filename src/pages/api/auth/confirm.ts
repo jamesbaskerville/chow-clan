@@ -18,5 +18,5 @@ export const GET: APIRoute = async (context) => {
     }
 
 
-    return redirect("/dashboard");
+    return redirect("/admin");
 };

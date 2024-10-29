@@ -1,0 +1,36 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+
+const user = (Astro.locals as any).user;
+---
+
+<AdminLayout title="The Chow Clan" user={user}>
+    <main>
+        <p class="instructions">
+            Please check your email for a link to verify your account.
+        </p>
+    </main>
+</AdminLayout>
+
+<style>
+    main {
+        margin: auto;
+        padding: 1rem;
+        width: 800px;
+        max-width: calc(100% - 2rem);
+        color: rgb(var(--font-color));
+        font-size: 20px;
+        line-height: 1.6;
+    }
+    .instructions {
+        margin-bottom: 2rem;
+        border: 1px solid rgba(var(--accent-light), 25%);
+        background: linear-gradient(
+            rgba(var(--accent-dark), 66%),
+            rgba(var(--accent-dark), 33%)
+        );
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+</style>

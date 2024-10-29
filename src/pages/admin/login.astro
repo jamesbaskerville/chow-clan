@@ -1,0 +1,18 @@
+---
+export const prerender = false;
+
+import AdminLayout from "../../layouts/AdminLayout.astro";
+
+const user = (Astro.locals as any).user;
+---
+
+<AdminLayout title="Sign in with email" user={user}>
+    <main>
+        <h1>Sign in</h1>
+        <form action="/api/auth/login" method="post">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" />
+            <button type="submit">Login</button>
+        </form>
+    </main>
+</AdminLayout>
